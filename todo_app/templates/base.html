@@ -21,7 +21,7 @@
     {% comment %} Navbar Start {% endcomment %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="{% url "tasks" %}">Navbar</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -36,45 +36,25 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url "tasks" %}">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link disabled"
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
-                >Disabled</a
-              >
-            </li>
+            <div class="d-flex align-items-center">
+              {% if user.is_authenticated %}
+                  <form action="{% url 'logout' %}" method="post" class="me-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">Logout</button>
+                  </form>
+                  <a href="{% url 'task-create' %}" class="btn btn-success me-2">Add Task</a>
+              {% else %}
+                  <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Login</a>
+                  <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+              {% endif %}
+            </div>
           </ul>
           <form method="GET" class="d-flex">
             <input
               class="form-control me-2"
-              type="search"
+              type="submit"
               name="{{search_area}}"
               placeholder="Search here"
               aria-label="Search"
@@ -82,13 +62,10 @@
             <button class="btn btn-outline-success" type="submit">
               Search
             </button>
-            {% if tasks | length > 0 %}
-            <a href="#">Add Task</a>
-            {% endif %}
           </form>
-          {% if tasks | length > 0 %}
-          <a href="#">Add Task</a>
-          {% endif %}
+          {% comment %} {% if tasks|length > 0 %}
+          <a href="{% url "task-create" %}">Add Task</a>
+          {% endif %} {% endcomment %}
         </div>
       </div>
     </nav>

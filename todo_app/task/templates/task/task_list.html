@@ -1,27 +1,31 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% block title %} All Task {% endblock %} 
+{% block title %}All Tasks{% endblock %}
 
 {% block content %}
-
 <div class="container">
-  {% for task in tasks %}
-  <div>
-    {% if task.complete %}
-    <i
-      ><s><a href="#">{{task}}</a></s></i
-    >
-    {% endif %}
-  </div>
-  <a href="#">Delete</a>
-  {% endfor %}
+  {% if tasks %}
+    {% for task in tasks %}
+      <div class="task-item">
+        {% if task.complete %}
+          <i><s><a href="{% url 'task-detail' task.id %}">{{ task }}</a></s></i>
+        {% else %}
+          <a href="{% url 'task-detail' task.id %}">{{ task }}</a>
+        {% endif %}
+        <a href="{% url 'task-delete' task.id %}" class="text-danger mx-5">Delete</a>
+        <a href="{% url 'task-update' task.id %}" class="text-danger mx-5">Update</a>
+      </div>
+    {% empty %}
+      <div class="no-tasks">
+        <h3>No tasks created</h3>
+        <h3>Create a <a href="{% url 'task-create' %}">New Task</a></h3>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="no-tasks">
+      <h3>No tasks available</h3>
+      <h3>Create a <a href="{% url 'task-create' %}">New Task</a></h3>
+    </div>
+  {% endif %}
 </div>
-
-{% empty %}
-
-<div class="container">
-  <h3>No task created</h3>
-  <h3>Create a <a href="#">New Task</a></h3>
-</div>
-
 {% endblock %}
